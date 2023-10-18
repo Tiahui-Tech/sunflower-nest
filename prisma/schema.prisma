@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  NON_BINARY
+}
+
+enum AnimeStatus {
+  ONGOING
+  FINISHED
+  UPCOMING
+  HIATUS
+  ON_BREAK
+  DROPPED
+}
+
+model User {
+  id             Int        @id @unique @default(autoincrement()) @map("userId")
+  email          String     @unique
+  username       String     @unique
+  avatarURL      String
+  gender         Gender
+  favoriteGenres UserGenre[]
+  favoriteAnimes UserAnime[]
+  followed       Follower[] @relation("UserFollows")
+  followers      Follower[] @relation("UserFollowedBy")
+  reviews        Review[]
+
+  @@index([id])
+}
+
+model Follower {
+  id         Int  @id @default(autoincrement())
+  followedId Int
+  followerId Int
+  followed   User @relation("UserFollows", fields: [followedId], references: [id])
+  follower   User @relation("UserFollowedBy", fields: [followerId], references: [id])
+
+  @@index([id])
+}
+
+model Genre {
+  id     Int     @id @default(autoincrement())
+  name   String
+  animes Anime[]
+  fans   UserGenre[]
+
+  @@index([id])
+}
+
+model Anime {
+  id       Int       @id @default(autoincrement())
+  title    String
+  synopsis String
+  genres   Genre[]
+  reviews  Review[]
+  episodes Episode[]
+  casts    Cast[]
+  fans   UserAnime[]
+
+  @@index([id])
+}
+
+model UserAnime {
+  userId Int
+  animeId Int
+  user   User   @relation(fields: [userId], references: [id])
+  anime  Anime  @relation(fields: [animeId], references: [id])
+
+  @@id([userId, animeId])
+}
+
+model UserGenre {
+  userId  Int
+  genreId Int
+  user    User   @relation(fields: [userId], references: [id])
+  genre   Genre  @relation(fields: [genreId], references: [id])
+
+  @@id([userId, genreId])
+}
+
+model Review {
+  id      Int    @id @default(autoincrement()) @map("reviewID")
+  user    User   @relation(fields: [userId], references: [id])
+  userId  Int
+  anime   Anime  @relation(fields: [animeId], references: [id])
+  animeId Int
+  content String
+
+  @@index([id])
+}
+
+model Episode {
+  id       Int    @id @default(autoincrement()) @map("episodeID")
+  anime    Anime  @relation(fields: [animeId], references: [id])
+  animeId  Int
+  season   Int
+  coverURL String
+  title    String
+  duration Int
+
+  @@index([id])
+}
+
+model Cast {
+  id       Int     @id @default(autoincrement()) @map("castID")
+  name     String
+  coverURL String
+  animes   Anime[]
+
+  @@index([id])
+}
