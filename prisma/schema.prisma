@@ -15,6 +15,7 @@ enum Gender {
   NON_BINARY
 }
 
+
 /// It represents the status of the anime, in terms of whether it is on air, finished, upcoming, etc.
 enum AnimeStatus {
   /// Anime is currently on air.
