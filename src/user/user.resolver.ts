@@ -13,7 +13,7 @@ export class UserResolver {
   }
 
   @Query(() => User)
-  async getUserById(@Args('id') id: number) {
+  async getUserById(@Args('id') id: number): Promise<PrismaUser> {
     return await this.userService.findById(id);
   }
 
@@ -21,7 +21,7 @@ export class UserResolver {
   async createUser(
     @Args('email') email: string,
     @Args('username') username: string,
-  ) {
+  ): Promise<PrismaUser> {
     const newUser = { email, username };
     return await this.userService.create(newUser);
   }
@@ -31,13 +31,13 @@ export class UserResolver {
     @Args('id') id: number,
     @Args('email', { nullable: true }) email?: string,
     @Args('username', { nullable: true }) username?: string,
-  ) {
+  ): Promise<PrismaUser> {
     const updatedFields = { email, username };
     return await this.userService.update(id, updatedFields);
   }
 
   @Mutation(() => Boolean)
-  async deleteUser(@Args('id') id: number) {
+  async deleteUser(@Args('id') id: number): Promise<PrismaUser> {
     return await this.userService.delete(id);
   }
 }
