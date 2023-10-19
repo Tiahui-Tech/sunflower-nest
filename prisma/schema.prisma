@@ -10,11 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Gender {
-  MALE
-  FEMALE
-  NON_BINARY
-}
+// enum Gender {
+//   MALE
+//   FEMALE
+//   NON_BINARY
+// }
 
 enum AnimeStatus {
   ONGOING
@@ -29,8 +29,8 @@ model User {
   id             Int        @id @unique @default(autoincrement()) @map("userId")
   email          String     @unique
   username       String     @unique
-  avatarURL      String
-  gender         Gender
+  avatarURL      String?
+  // gender         Gender
   favoriteGenres UserGenre[]
   favoriteAnimes UserAnime[]
   followed       Follower[] @relation("UserFollows")
