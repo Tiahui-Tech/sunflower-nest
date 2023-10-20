@@ -48,6 +48,10 @@ model User {
   username       String      @unique @db.VarChar(12) // Username chosen by the user.
   avatarURL      String // URL to the user's avatar image.
   gender         Gender // Gender of the user, as defined in the Gender enum.
+  followersCount Int        @default(0) // Number of followers of the user.
+  followedCount  Int        @default(0) // Number of users the user is following.
+  animesCount    Int        @default(0) // Number of animes liked by the user
+  reviewsCount   Int        @default(0) // Number of reviews the user has written.
   favoriteGenres UserGenre[] // List of genres favored by the user.
   favoriteAnimes UserAnime[] // List of animes favored by the user.
   followed       Follower[]  @relation("UserFollows") // List of users that this user is following.
