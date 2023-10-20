@@ -7,36 +7,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Represents possible genders.
 enum Gender {
+  // Represents the male gender.
   MALE
+  
+  // Represents the female gender.
   FEMALE
+  
+  // Represents non-binary genders.
   NON_BINARY
 }
 
+
+// It represents the status of the anime, in terms of whether it is on air, finished, upcoming, etc.
 enum AnimeStatus {
+  // Anime is currently on air.
   ONGOING
+
+  // Anime has finished airing.
   FINISHED
+
+  // Anime is yet to be aired.
   UPCOMING
+
+  // Anime is on an indefinite break
   HIATUS
+
+  // Anime is in a temporary and definite break
   ON_BREAK
+
+  // Anime was cancelled/abandoned suddenly
   DROPPED
 }
 
-model User {
-  id             Int        @id @unique @default(autoincrement()) @map("userId")
-  email          String     @unique
-  username       String     @unique
-  avatarURL      String
-  gender         Gender
-  favoriteGenres UserGenre[]
-  favoriteAnimes UserAnime[]
-  followed       Follower[] @relation("UserFollows")
-  followers      Follower[] @relation("UserFollowedBy")
-  reviews        Review[]
 
-  @@index([id])
+// Represents a user or profile.
+model User {
+  id             Int        @id @unique @default(autoincrement()) @map("userId") // Unique identifier for a user.
+  email          String     @unique // Email address of the user.
+  username       String     @unique // Username chosen by the user.
+  avatarURL      String     // URL to the user's avatar image.
+  gender         Gender     // Gender of the user, as defined in the Gender enum.
+  favoriteGenres UserGenre[] // List of genres favored by the user.
+  favoriteAnimes UserAnime[] // List of animes favored by the user.
+  followed       Follower[] @relation("UserFollows") // List of users that this user is following.
+  followers      Follower[] @relation("UserFollowedBy") // List of users who are following this user.
+  reviews        Review[]   // List of reviews written by the user.
+
+  @@index([id]) // Index for enhancing search performance.
 }
 
+
+// Intermediate model for connecting the followers/following of an individual user
 model Follower {
   id         Int  @id @default(autoincrement())
   followedId Int
@@ -47,74 +70,81 @@ model Follower {
   @@index([id])
 }
 
+// Represents a genre of anime.
 model Genre {
-  id     Int     @id @default(autoincrement())
-  name   String
-  animes Anime[]
-  fans   UserGenre[]
+  id     Int     @id @default(autoincrement()) // Unique identifier for a genre.
+  name   String  // Name of the genre.
+  animes Anime[] // List of animes associated with this genre.
+  fans   UserGenre[] // List of users who are fans of this genre.
 
-  @@index([id])
+  @@index([id])  // Index for enhancing search performance.
 }
 
+// Represents an individual anime.
 model Anime {
-  id       Int       @id @default(autoincrement())
-  title    String
-  synopsis String
-  genres   Genre[]
-  reviews  Review[]
-  episodes Episode[]
-  casts    Cast[]
-  fans   UserAnime[]
+  id       Int       @id @default(autoincrement()) // Unique identifier for an anime.
+  title    String    // Title of the anime.
+  synopsis String    // Brief summary or description of the anime.
+  genres   Genre[]   // List of genres the anime belongs to.
+  reviews  Review[]  // List of reviews for the anime.
+  episodes Episode[] // List of episodes of the anime.
+  casts    Cast[]    // List of cast members associated with the anime.
+  fans     UserAnime[] // List of users who are fans of the anime.
 
-  @@index([id])
+  @@index([id]) // Index for enhancing search performance.
 }
 
+// Intermediate model connecting a user and an anime they are a fan of.
 model UserAnime {
-  userId Int
-  animeId Int
-  user   User   @relation(fields: [userId], references: [id])
-  anime  Anime  @relation(fields: [animeId], references: [id])
+  userId Int   // The ID of the user.
+  animeId Int  // The ID of the anime.
+  user   User  @relation(fields: [userId], references: [id]) // Relation to the User model.
+  anime  Anime @relation(fields: [animeId], references: [id]) // Relation to the Anime model.
 
-  @@id([userId, animeId])
+  @@id([userId, animeId]) // Composite primary key.
 }
 
+// Intermediate model connecting a user and a genre they are a fan of.
 model UserGenre {
-  userId  Int
-  genreId Int
-  user    User   @relation(fields: [userId], references: [id])
-  genre   Genre  @relation(fields: [genreId], references: [id])
+  userId  Int   // The ID of the user.
+  genreId Int   // The ID of the genre.
+  user    User  @relation(fields: [userId], references: [id])  // Relation to the User model.
+  genre   Genre @relation(fields: [genreId], references: [id])  // Relation to the Genre model.
 
-  @@id([userId, genreId])
+  @@id([userId, genreId]) // Composite primary key.
 }
 
+// Represents a review of an anime.
 model Review {
-  id      Int    @id @default(autoincrement()) @map("reviewID")
-  user    User   @relation(fields: [userId], references: [id])
-  userId  Int
-  anime   Anime  @relation(fields: [animeId], references: [id])
-  animeId Int
-  content String
+  id      Int    @id @default(autoincrement()) @map("reviewID") // Unique identifier for a review.
+  user    User   @relation(fields: [userId], references: [id])  // Relation to the User model.
+  userId  Int    // The ID of the user who wrote the review.
+  anime   Anime  @relation(fields: [animeId], references: [id]) // Relation to the Anime model.
+  animeId Int    // The ID of the anime being reviewed.
+  content String // Text content of the review.
 
-  @@index([id])
+  @@index([id]) // Index for enhancing search performance.
 }
 
+// Represents an episode of an anime.
 model Episode {
-  id       Int    @id @default(autoincrement()) @map("episodeID")
-  anime    Anime  @relation(fields: [animeId], references: [id])
-  animeId  Int
-  season   Int
-  coverURL String
-  title    String
-  duration Int
+  id       Int    @id @default(autoincrement()) @map("episodeID") // Unique identifier for an episode.
+  anime    Anime  @relation(fields: [animeId], references: [id])  // Relation to the Anime model.
+  animeId  Int    // The ID of the anime.
+  season   Int    // The season number.
+  coverURL String // URL to the cover image of the episode.
+  title    String // Title of the episode.
+  duration Int    // Duration of the episode in minutes.
 
-  @@index([id])
+  @@index([id]) // Index for enhancing search performance.
 }
 
+// Represents a cast member of an anime.
 model Cast {
-  id       Int     @id @default(autoincrement()) @map("castID")
-  name     String
-  coverURL String
-  animes   Anime[]
+  id       Int     @id @default(autoincrement()) @map("castID") // Unique identifier for a cast member.
+  name     String  // Name of the cast member.
+  coverURL String  // URL to the cover image of the cast member.
+  animes   Anime[] // List of animes the cast member is associated with.
 
-  @@index([id])
+  @@index([id]) // Index for enhancing search performance.
 }
