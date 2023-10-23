@@ -70,7 +70,6 @@ model Follower {
 
   createdAt DateTime @default(now())
 
-
   @@index([id, followedId, followerId])
 }
 
