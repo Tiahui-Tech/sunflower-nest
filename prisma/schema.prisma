@@ -47,8 +47,8 @@ model User {
   followedCount  Int        @default(0) 
   animesCount    Int        @default(0) 
   reviewsCount   Int        @default(0) 
-  favoriteGenres UserGenre[] 
-  favoriteAnimes UserAnime[]
+  favoriteGenres UserGenreFans[] 
+  favoriteAnimes UserAnimeFans[]
   following       Follower[]  @relation("FollowingUsers")
   followers      Follower[]  @relation("UserFollowers")
   reviews        Review[]
@@ -75,9 +75,9 @@ model Follower {
 /// Represents a genre of anime.
 model Genre {
   id     Int         @id @default(autoincrement())
-  name   String 
-  animes Anime[] 
-  fans   UserGenre[] 
+  name   String
+  animes Anime[]
+  fans   UserGenreFans[]
 
   createdAt DateTime @default(now()) 
 
@@ -92,8 +92,8 @@ model Anime {
   genres   Genre[]
   reviews  Review[] 
   episodes Episode[] 
-  casts    Cast[] 
-  fans     UserAnime[] 
+  castMembers    CastOnAnime[] 
+  fans     UserAnimeFans[] 
 
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt 
@@ -102,7 +102,7 @@ model Anime {
 }
 
 /// Intermediate model connecting a user and an anime they are a fan of.
-model UserAnime {
+model UserAnimeFans {
   userId  Int 
   animeId Int 
   user    User  @relation(fields: [userId], references: [id]) 
@@ -114,7 +114,7 @@ model UserAnime {
 }
 
 /// Intermediate model connecting a user and a genre they are a fan of.
-model UserGenre {
+model UserGenreFans {
   userId  Int
   genreId Int
   user    User  @relation(fields: [userId], references: [id])
@@ -161,10 +161,19 @@ model Cast {
   id       Int     @id @default(autoincrement()) @map("castID") 
   name     String 
   coverURL String 
-  animes   Anime[] 
+  animes   CastOnAnime[] 
 
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt 
 
   @@index([id]) 
+}
+
+model CastOnAnime{
+  castId Int
+  animeId Int
+  cast Cast @relation(fields: [castId], references: [id])
+  anime Anime @relation(fields: [animeId], references: [id])
+
+  @@id([castId, animeId])
 }
