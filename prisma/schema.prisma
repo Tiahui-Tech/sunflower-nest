@@ -8,35 +8,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Represents possible genders.
+/// Represents possible genders.
 enum Gender {
   MALE
   FEMALE
   NON_BINARY
 }
 
-// It represents the status of the anime, in terms of whether it is on air, finished, upcoming, etc.
+/// It represents the status of the anime, in terms of whether it is on air, finished, upcoming, etc.
 enum AnimeStatus {
-  // Anime is currently on air.
+  /// Anime is currently on air.
   ONGOING
 
-  // Anime has finished airing.
+  /// Anime has finished airing.
   FINISHED
 
-  // Anime is yet to be aired.
+  /// Anime is yet to be aired.
   UPCOMING
 
-  // Anime is on an indefinite break
+  /// Anime is on an indefinite break
   HIATUS
 
-  // Anime is in a temporary and definite break
+  /// Anime is in a temporary and definite break
   ON_BREAK
 
-  // Anime was cancelled/abandoned suddenly
+  /// Anime was cancelled/abandoned suddenly
   DROPPED
 }
 
-// Represents a user or profile.
+/// Represents a user or profile.
 model User {
   id             Int         @id @unique @default(autoincrement())
   email          String      @unique @db.VarChar(255) 
@@ -47,10 +47,10 @@ model User {
   followedCount  Int        @default(0) 
   animesCount    Int        @default(0) 
   reviewsCount   Int        @default(0) 
-  favoriteGenres UserGenre[] 
-  favoriteAnimes UserAnime[]
-  followed       Follower[]  @relation("UserFollows")
-  followers      Follower[]  @relation("UserFollowedBy")
+  favoriteGenres UserGenreFans[] 
+  favoriteAnimes UserAnimeFans[]
+  following       Follower[]  @relation("FollowingUsers")
+  followers      Follower[]  @relation("UserFollowers")
   reviews        Review[]
 
   createdAt DateTime @default(now())
@@ -59,32 +59,32 @@ model User {
   @@index([id])
 }
 
-// Intermediate model for connecting the followers/following of an individual user
+/// Intermediate model for connecting the followers/following of an individual user
 model Follower {
   id         Int  @id @default(autoincrement())
   followedId Int
   followerId Int
-  followed   User @relation("UserFollows", fields: [followedId], references: [id])
-  follower   User @relation("UserFollowedBy", fields: [followerId], references: [id])
+  followed   User @relation("FollowingUsers", fields: [followedId], references: [id])
+  follower   User @relation("UserFollowers", fields: [followerId], references: [id])
 
   createdAt DateTime @default(now())
 
   @@index([id, followedId, followerId])
 }
 
-// Represents a genre of anime.
+/// Represents a genre of anime.
 model Genre {
   id     Int         @id @default(autoincrement())
-  name   String 
-  animes Anime[] 
-  fans   UserGenre[] 
+  name   String
+  animes Anime[]
+  fans   UserGenreFans[]
 
   createdAt DateTime @default(now()) 
 
   @@index([id]) 
 }
 
-// Represents an individual anime.
+/// Represents an individual anime.
 model Anime {
   id       Int         @id @default(autoincrement()) 
   title    String 
@@ -92,8 +92,8 @@ model Anime {
   genres   Genre[]
   reviews  Review[] 
   episodes Episode[] 
-  casts    Cast[] 
-  fans     UserAnime[] 
+  castMembers    CastOnAnime[] 
+  fans     UserAnimeFans[] 
 
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt 
@@ -101,8 +101,8 @@ model Anime {
   @@index([id]) 
 }
 
-// Intermediate model connecting a user and an anime they are a fan of.
-model UserAnime {
+/// Intermediate model connecting a user and an anime they are a fan of.
+model UserAnimeFans {
   userId  Int 
   animeId Int 
   user    User  @relation(fields: [userId], references: [id]) 
@@ -113,8 +113,8 @@ model UserAnime {
   @@id([userId, animeId]) 
 }
 
-// Intermediate model connecting a user and a genre they are a fan of.
-model UserGenre {
+/// Intermediate model connecting a user and a genre they are a fan of.
+model UserGenreFans {
   userId  Int
   genreId Int
   user    User  @relation(fields: [userId], references: [id])
@@ -125,7 +125,7 @@ model UserGenre {
   @@id([userId, genreId]) 
 }
 
-// Represents a review of an anime.
+/// Represents a review of an anime.
 model Review {
   id      Int    @id @default(autoincrement()) @map("reviewID") 
   user    User   @relation(fields: [userId], references: [id]) 
@@ -140,7 +140,7 @@ model Review {
   @@index([id]) 
 }
 
-// Represents an episode of an anime.
+/// Represents an episode of an anime.
 model Episode {
   id       Int    @id @default(autoincrement()) @map("episodeID") 
   anime    Anime  @relation(fields: [animeId], references: [id]) 
@@ -156,15 +156,24 @@ model Episode {
   @@index([id]) 
 }
 
-// Represents a cast member of an anime.
+/// Represents a cast member of an anime.
 model Cast {
   id       Int     @id @default(autoincrement()) @map("castID") 
   name     String 
   coverURL String 
-  animes   Anime[] 
+  animes   CastOnAnime[] 
 
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt 
 
   @@index([id]) 
+}
+
+model CastOnAnime{
+  castId Int
+  animeId Int
+  cast Cast @relation(fields: [castId], references: [id])
+  anime Anime @relation(fields: [animeId], references: [id])
+
+  @@id([castId, animeId])
 }
