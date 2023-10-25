@@ -49,8 +49,8 @@ model User {
   reviewsCount   Int        @default(0) 
   favoriteGenres UserGenre[] 
   favoriteAnimes UserAnime[]
-  followed       Follower[]  @relation("UserFollows")
-  followers      Follower[]  @relation("UserFollowedBy")
+  following       Follower[]  @relation("FollowingUsers")
+  followers      Follower[]  @relation("UserFollowers")
   reviews        Review[]
 
   createdAt DateTime @default(now())
@@ -64,8 +64,8 @@ model Follower {
   id         Int  @id @default(autoincrement())
   followedId Int
   followerId Int
-  followed   User @relation("UserFollows", fields: [followedId], references: [id])
-  follower   User @relation("UserFollowedBy", fields: [followerId], references: [id])
+  followed   User @relation("FollowingUsers", fields: [followedId], references: [id])
+  follower   User @relation("UserFollowers", fields: [followerId], references: [id])
 
   createdAt DateTime @default(now())
 
