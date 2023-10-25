@@ -160,6 +160,7 @@ model Episode {
 model Cast {
   id       Int     @id @default(autoincrement()) @map("castID") 
   name     String 
+  character String
   coverURL String 
   animes   CastOnAnime[] 
 
