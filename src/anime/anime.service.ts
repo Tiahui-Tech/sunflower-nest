@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma.service'; 
-import { Anime as PrismaAnime, Prisma } from '@prisma/client'; 
+import { PrismaService } from '../prisma/prisma.service';
+import { Anime as PrismaAnime } from '@prisma/client';
+import { AnimeCreateInput } from 'src/@generated/anime/anime-create.input';
 
 @Injectable()
 export class AnimeService {
@@ -8,6 +9,15 @@ export class AnimeService {
 
   async findAll(): Promise<PrismaAnime[]> {
     return this.prisma.anime.findMany();
+  }
+
+  async findTopAnime(): Promise<PrismaAnime[]> {
+    return this.prisma.anime.findMany({
+      orderBy: {
+        viewCount: 'desc',
+      },
+      take: 10,
+    });
   }
 
   async findById(id: number): Promise<PrismaAnime> {
@@ -18,7 +28,7 @@ export class AnimeService {
     return anime;
   }
 
-  async create(input: Prisma.AnimeCreateInput): Promise<PrismaAnime> {
+  async create(input: AnimeCreateInput): Promise<PrismaAnime> {
     return this.prisma.anime.create({ data: input });
   }
 }
