@@ -1,6 +1,6 @@
 generator client {
   provider = "node node_modules/prisma-nestjs-graphql"
-  output = "../src/@generated"
+  output   = "../src/@generated"
 }
 
 datasource db {
@@ -19,98 +19,93 @@ enum Gender {
 enum AnimeStatus {
   /// Anime is currently on air.
   ONGOING
-
   /// Anime has finished airing.
   FINISHED
-
   /// Anime is yet to be aired.
   UPCOMING
-
   /// Anime is on an indefinite break
   HIATUS
-
   /// Anime is in a temporary and definite break
   ON_BREAK
-
   /// Anime was cancelled/abandoned suddenly
   DROPPED
 }
 
 /// Represents a user or profile.
 model User {
-  id             Int         @id @unique @default(autoincrement())
-  email          String      @unique @db.VarChar(255) 
-  username       String      @unique @db.VarChar(12) 
-  avatarURL      String 
-  gender         Gender 
-  followersCount Int        @default(0) 
-  followedCount  Int        @default(0) 
-  animesCount    Int        @default(0) 
-  reviewsCount   Int        @default(0) 
-  favoriteGenres UserGenreFans[] 
+  id             Int             @id @unique @default(autoincrement())
+  email          String          @unique @db.VarChar(255)
+  username       String          @unique @db.VarChar(12)
+  avatarURL      String
+  gender         Gender
+  followersCount Int             @default(0)
+  followingCount Int             @default(0)
+  animesCount    Int             @default(0)
+  reviewsCount   Int             @default(0)
+  favoriteGenres UserGenreFans[]
   favoriteAnimes UserAnimeFans[]
-  following       Follower[]  @relation("FollowingUsers")
-  followers      Follower[]  @relation("UserFollowers")
+  following      Follower[]      @relation("FollowingUsers")
+  followers      Follower[]      @relation("UserFollowers")
   reviews        Review[]
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt 
+  updatedAt DateTime @updatedAt
 
   @@index([id])
 }
 
 /// Intermediate model for connecting the followers/following of an individual user
 model Follower {
-  id         Int  @id @default(autoincrement())
-  followedId Int
-  followerId Int
-  followed   User @relation("FollowingUsers", fields: [followedId], references: [id])
-  follower   User @relation("UserFollowers", fields: [followerId], references: [id])
+  id          Int  @id @default(autoincrement())
+  followingId Int
+  following   User @relation("FollowingUsers", fields: [followingId], references: [id])
+  followerId  Int
+  follower    User @relation("UserFollowers", fields: [followerId], references: [id])
 
   createdAt DateTime @default(now())
 
-  @@index([id, followedId, followerId])
+  @@index([id, followingId, followerId])
 }
 
 /// Represents a genre of anime.
 model Genre {
-  id     Int         @id @default(autoincrement())
+  id     Int             @id @default(autoincrement())
   name   String
   animes Anime[]
   fans   UserGenreFans[]
 
-  createdAt DateTime @default(now()) 
+  createdAt DateTime @default(now())
 
-  @@index([id]) 
+  @@index([id])
 }
 
 /// Represents an individual anime.
 model Anime {
-  id       Int         @id @default(autoincrement()) 
-  title    String 
-  synopsis String 
-  genres   Genre[]
-  reviews  Review[] 
-  episodes Episode[] 
-  castMembers    CastOnAnime[] 
-  fans     UserAnimeFans[] 
+  id          Int             @id @default(autoincrement())
+  title       String
+  synopsis    String
+  genres      Genre[]
+  reviews     Review[]
+  episodes    Episode[]
+  castMembers CastOnAnime[]
+  fans        UserAnimeFans[]
 
-  createdAt DateTime @default(now()) 
-  updatedAt DateTime @updatedAt 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@index([id]) 
+  @@index([id])
 }
 
 /// Intermediate model connecting a user and an anime they are a fan of.
 model UserAnimeFans {
-  userId  Int 
-  animeId Int 
-  user    User  @relation(fields: [userId], references: [id]) 
-  anime   Anime @relation(fields: [animeId], references: [id]) 
+  userId  Int
+  animeId Int
+  user    User  @relation(fields: [userId], references: [id])
+  anime   Anime @relation(fields: [animeId], references: [id])
 
-  createdAt DateTime @default(now()) 
+  createdAt DateTime @default(now())
 
-  @@id([userId, animeId]) 
+  @@id([userId, animeId])
 }
 
 /// Intermediate model connecting a user and a genre they are a fan of.
@@ -118,62 +113,62 @@ model UserGenreFans {
   userId  Int
   genreId Int
   user    User  @relation(fields: [userId], references: [id])
-  genre   Genre @relation(fields: [genreId], references: [id]) 
+  genre   Genre @relation(fields: [genreId], references: [id])
 
-  createdAt DateTime @default(now()) 
+  createdAt DateTime @default(now())
 
-  @@id([userId, genreId]) 
+  @@id([userId, genreId])
 }
 
 /// Represents a review of an anime.
 model Review {
-  id      Int    @id @default(autoincrement()) @map("reviewID") 
-  user    User   @relation(fields: [userId], references: [id]) 
-  userId  Int 
-  anime   Anime  @relation(fields: [animeId], references: [id]) 
-  animeId Int 
-  content String 
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [userId], references: [id])
+  userId  Int
+  anime   Anime  @relation(fields: [animeId], references: [id])
+  animeId Int
+  content String
 
-  createdAt DateTime @default(now()) 
-  updatedAt DateTime @updatedAt 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@index([id]) 
+  @@index([id])
 }
 
 /// Represents an episode of an anime.
 model Episode {
-  id       Int    @id @default(autoincrement()) @map("episodeID") 
-  anime    Anime  @relation(fields: [animeId], references: [id]) 
-  animeId  Int 
-  season   Int 
-  coverURL String 
-  title    String 
-  duration Int 
+  id       Int    @id @default(autoincrement())
+  anime    Anime  @relation(fields: [animeId], references: [id])
+  animeId  Int
+  season   Int
+  coverURL String
+  title    String
+  duration Int
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt 
+  updatedAt DateTime @updatedAt
 
-  @@index([id]) 
+  @@index([id])
 }
 
 /// Represents a cast member of an anime.
-model Cast {
-  id       Int     @id @default(autoincrement()) @map("castID") 
-  name     String 
-  coverURL String 
-  animes   CastOnAnime[] 
+model CastMember {
+  id       Int           @id @default(autoincrement())
+  name     String
+  coverURL String
+  animes   CastOnAnime[]
 
-  createdAt DateTime @default(now()) 
-  updatedAt DateTime @updatedAt 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@index([id]) 
+  @@index([id])
 }
 
-model CastOnAnime{
-  castId Int
+model CastOnAnime {
+  castId  Int
   animeId Int
-  cast Cast @relation(fields: [castId], references: [id])
-  anime Anime @relation(fields: [animeId], references: [id])
+  cast    CastMember @relation(fields: [castId], references: [id])
+  anime   Anime      @relation(fields: [animeId], references: [id])
 
   @@id([castId, animeId])
 }
