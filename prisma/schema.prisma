@@ -19,19 +19,14 @@ enum Gender {
 enum AnimeStatus {
   /// Anime is currently on air.
   ONGOING
-
   /// Anime has finished airing.
   FINISHED
-
   /// Anime is yet to be aired.
   UPCOMING
-
   /// Anime is on an indefinite break
   HIATUS
-
   /// Anime is in a temporary and definite break
   ON_BREAK
-
   /// Anime was cancelled/abandoned suddenly
   DROPPED
 }
@@ -44,7 +39,7 @@ model User {
   avatarURL      String
   gender         Gender
   followersCount Int             @default(0)
-  followedCount  Int             @default(0)
+  followingCount Int             @default(0)
   animesCount    Int             @default(0)
   reviewsCount   Int             @default(0)
   favoriteGenres UserGenreFans[]
@@ -61,19 +56,19 @@ model User {
 
 /// Intermediate model for connecting the followers/following of an individual user
 model Follower {
-  id         Int  @id @default(autoincrement())
-  followedId Int
-  followerId Int
-  followed   User @relation("FollowingUsers", fields: [followedId], references: [id])
-  follower   User @relation("UserFollowers", fields: [followerId], references: [id])
+  id          Int  @id @default(autoincrement())
+  followingId Int
+  following   User @relation("FollowingUsers", fields: [followingId], references: [id])
+  followerId  Int
+  follower    User @relation("UserFollowers", fields: [followerId], references: [id])
 
   createdAt DateTime @default(now())
 
-  @@index([id, followedId, followerId])
+  @@index([id, followingId, followerId])
 }
 
 /// Represents a genre of anime.
-model AnimeGenre {
+model Genre {
   id     Int             @id @default(autoincrement())
   name   String
   animes Anime[]
@@ -85,7 +80,7 @@ model AnimeGenre {
 }
 
 /// Represents a tag of anime.
-model AnimeTag {
+model Tag {
   id     Int     @id @default(autoincrement())
   name   String
   animes Anime[]
@@ -103,8 +98,8 @@ model Anime {
   status      AnimeStatus
   imageURL    String
   trailerURL  String
-  tags        AnimeTag[]
-  genres      AnimeGenre[]
+  tags        Tag[]
+  genres      Genre[]
   reviews     Review[]
   episodes    Episode[]
   castMembers CastOnAnime[]
@@ -135,8 +130,8 @@ model UserAnimeFans {
 model UserGenreFans {
   userId  Int
   genreId Int
-  user    User       @relation(fields: [userId], references: [id])
-  genre   AnimeGenre @relation(fields: [genreId], references: [id])
+  user    User  @relation(fields: [userId], references: [id])
+  genre   Genre @relation(fields: [genreId], references: [id])
 
   createdAt DateTime @default(now())
 
