@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Anime as PrismaAnime } from '@prisma/client';
+import { Anime } from 'src/@generated/anime/anime.model';
 
 @Injectable()
 export class RecommendationService {
@@ -9,7 +9,7 @@ export class RecommendationService {
   async getRecommendationsForUser(
     userId: number,
     animeCount: number,
-  ): Promise<PrismaAnime[]> {
+  ): Promise<Anime[]> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: {
