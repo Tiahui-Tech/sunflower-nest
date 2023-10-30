@@ -1,6 +1,7 @@
 import {
   Field,
   ObjectType,
+  InputType,
   Int,
   Float,
   registerEnumType,
@@ -83,4 +84,58 @@ export class Anime {
 
   @Field()
   updatedAt: Date;
+}
+
+@InputType()
+export class AnimeCreateInput {
+  @Field()
+  title: string;
+
+  @Field()
+  synopsis: string;
+
+  @Field(type => String) // Asumiendo que $Enums.AnimeStatus es un string o enum. Si es un enum, reemplaza String con el tipo de enum.
+  status: string; // Cambia el tipo si AnimeStatus no es un string.
+
+  @Field()
+  imageURL: string;
+
+  @Field()
+  trailerURL: string;
+
+  @Field(type => Int)
+  rating: number;
+
+  @Field(type => Int, { nullable: true })
+  totalVotes?: number;
+
+  @Field(type => Int, { nullable: true })
+  viewCount?: number;
+
+  @Field({ nullable: true })
+  createdAt?: Date;
+
+  @Field({ nullable: true })
+  updatedAt?: Date;
+
+  // A continuación, las propiedades complejas. 
+  // Estas son representaciones simplificadas y deberías ajustarlas según tus necesidades.
+
+  @Field(type => [String], { nullable: true })
+  tags?: string[]; // Simplificado, deberías tener un InputType específico para esto.
+
+  @Field(type => [String], { nullable: true })
+  genres?: string[]; // Simplificado, deberías tener un InputType específico para esto.
+
+  @Field(type => [String], { nullable: true })
+  reviews?: string[]; // Simplificado, deberías tener un InputType específico para esto.
+
+  @Field(type => [String], { nullable: true })
+  episodes?: string[]; // Simplificado, deberías tener un InputType específico para esto.
+
+  @Field(type => [String], { nullable: true })
+  castMembers?: string[]; // Simplificado, deberías tener un InputType específico para esto.
+
+  @Field(type => [String], { nullable: true })
+  fans?: string[]; // Simplificado, deberías tener un InputType específico para esto.
 }
