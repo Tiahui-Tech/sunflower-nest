@@ -1,24 +1,24 @@
 import { Args, Query, Resolver, Mutation } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { User } from 'src/@generated/user/user.model';
-import { Gender} from '@prisma/client';
-import { StringFieldUpdateOperationsInput } from 'src/@generated/prisma/string-field-update-operations.input';
+import { User as UserModel } from './models/user.model';
+import { Gender, User } from '@prisma/client';
+
 
 @Resolver()
 export class UserResolver {
   constructor(private userService: UserService) {}
 
-  @Query(() => [User], { nullable: true })
+  @Query(() => [UserModel], { nullable: true })
   async getUsers(): Promise<User[]> {
     return await this.userService.findAll();
   }
 
-  @Query(() => User, { nullable: true })
+  @Query(() => UserModel, { nullable: true })
   async getUserById(@Args('id') id: number): Promise<User> {
     return await this.userService.findById(id);
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserModel)
   async createUser(
     @Args('email') email: string,
     @Args('username') username: string,
@@ -29,11 +29,11 @@ export class UserResolver {
     return await this.userService.create(newUser);
   }
 
-  @Mutation(() => User, { nullable: true })
+  @Mutation(() => UserModel, { nullable: true })
   async updateUser(
     @Args('id') id: number,
-    @Args('email', { nullable: true }) email?: StringFieldUpdateOperationsInput,
-    @Args('username', { nullable: true }) username?: StringFieldUpdateOperationsInput,
+    @Args('email', { nullable: true }) email?: string,
+    @Args('username', { nullable: true }) username?: string,
   ): Promise<User> {
     const updatedFields = { email, username };
     return await this.userService.update(id, updatedFields);

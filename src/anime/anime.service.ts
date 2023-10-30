@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Anime } from 'src/@generated/anime/anime.model';
-import { AnimeCreateInput } from 'src/@generated/anime/anime-create.input';
+import { Anime, Prisma } from '@prisma/client';
 
 @Injectable()
 export class AnimeService {
@@ -28,7 +27,7 @@ export class AnimeService {
     return anime;
   }
 
-  async create(input: AnimeCreateInput): Promise<Anime> {
+  async create(input: Prisma.AnimeCreateInput): Promise<Anime> {
     return this.prisma.anime.create({ data: input });
   }
 }
