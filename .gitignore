@@ -4,6 +4,7 @@
 package-lock.json
 /prisma/migrations
 /src/@generated
+/src/schema.gql
 
 # enviroment variables
 .env
