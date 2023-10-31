@@ -7,7 +7,8 @@ async function bootstrap() {
   app.enableCors({
     origin: '*',
     methods: 'GET,POST,HEAD',
-    allowedHeaders: 'Content-Type, Accept, Authorization, Access-Control-Allow-Origin',
+    allowedHeaders:
+      'Content-Type, Accept, Authorization, Access-Control-Allow-Origin, x-apollo-operation-name, apollo-require-preflight',
     credentials: true,
   });
 
