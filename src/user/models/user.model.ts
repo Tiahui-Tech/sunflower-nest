@@ -5,9 +5,9 @@ import { Follower } from './follower.model';
 import { Review } from './review.model';
 
 enum Gender {
-  MALE,
-  FEMALE,
-  NON_BINARY,
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  NON_BINARY = 'NON_BINARY',
 }
 
 registerEnumType(Gender, {

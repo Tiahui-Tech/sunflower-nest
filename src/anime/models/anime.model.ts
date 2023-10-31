@@ -15,17 +15,17 @@ import { UserAnimeFans } from 'src/user/models/user-anime-fans.model';
 
 enum AnimeStatus {
   /// Anime is currently on air.
-  ONGOING,
+  ONGOING = 'ONGOING',
   /// Anime has finished airing.
-  FINISHED,
+  FINISHED = 'FINISHED',
   /// Anime is yet to be aired.
-  UPCOMING,
+  UPCOMING = 'UPCOMING',
   /// Anime is on an indefinite break
-  HIATUS,
+  HIATUS = 'HIATUS',
   /// Anime is in a temporary and definite break
-  ON_BREAK,
+  ON_BREAK = 'ON_BREAK',
   /// Anime was cancelled/abandoned suddenly
-  DROPPED,
+  DROPPED = 'DROPPED',
 }
 
 registerEnumType(AnimeStatus, {
