@@ -8,6 +8,7 @@ async function bootstrap() {
     origin: '*',
     methods: 'GET,POST',
     allowedHeaders: 'Content-Type, Accept',
+    credentials: true,
   });
 
   const port = process.env.PORT || 3000;
