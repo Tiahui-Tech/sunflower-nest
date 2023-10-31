@@ -2,52 +2,40 @@
   <img src='https://i.imgur.com/DJOtiMD.png' alt='Sunflower Banner' />
 </div>
 
-## Description
+Welcome to the Sunflower API project. This API is developed using [NestJS](https://github.com/nestjs/nest), a powerful Node.js framework for building efficient and scalable server-side applications. It's integrated with GraphQL for streamlined queries and Prisma as an ORM to interact with the database.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🌼 Description
 
-## Installation
+The API is designed to provide anime recommendations based on various criteria. Users can search for animes by genre, popularity, rating, and more. Additionally, the API offers specific details about each anime, such as synopsis, episodes, main characters, and more.
 
-```bash
-$ npm install
-```
+## 🌱 Installation
 
-## Running the app
+Follow these steps to install and set up the project on your local machine:
 
-```bash
-# development
-$ npm run start
+1. **Install Dependencies**: Before starting, ensure you have Node.js and npm installed on your machine. Then, install all the project's dependencies with:
+   ```bash
+   $ npm install
+   ```
 
-# watch mode
-$ npm run start:dev
+2. **Generate Prisma Types**: For the API to interact correctly with the database, it's essential to generate the Prisma types. Run the following command:
+   ```bash
+   $ npx prisma generate
+   ```
 
-# production mode
-$ npm run start:prod
-```
+## 🚀 Running the API
 
-## Test
+Once you've installed all the dependencies and set up Prisma, you can run the API in the following ways:
 
-```bash
-# unit tests
-$ npm run test
+- **Development Mode**: Run the API in development mode. This will automatically restart the server every time you make a change to the code.
+  ```bash
+  $ npm run start:dev
+  ```
 
-# e2e tests
-$ npm run test:e2e
+- **Production Mode**: If you wish to run the API in production mode, use the following command:
+  ```bash
+  $ npm run start
+  ```
 
-# test coverage
-$ npm run test:cov
-```
+## 📜 License
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+This project is under the [MIT license](LICENSE). You can check the license file for more details.
