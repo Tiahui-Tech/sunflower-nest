@@ -22,8 +22,8 @@ export class AnimeResolver {
     return this.animeService.findById(id);
   }
 
-  @Mutation(() => AnimeModel, { nullable: true })
-  async createAnime(@Args('input') input: Prisma.AnimeCreateInput): Promise<Anime> {
-    return this.animeService.create(input);
-  }
+  // @Mutation(() => AnimeModel, { nullable: true })
+  // async createAnime(@Args('input') input: Prisma.AnimeCreateInput): Promise<Anime> {
+  //   return this.animeService.create(input);
+  // }
 }
