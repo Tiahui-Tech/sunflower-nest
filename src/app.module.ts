@@ -15,6 +15,9 @@ import { AnimeModule } from './anime/anime.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       stopOnTerminationSignals: false,
+      csrfPrevention: {
+        requestHeaders: [],
+      },
     }),
     UserModule,
     RecommendationModule,
