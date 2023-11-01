@@ -18,6 +18,7 @@ import { AnimeModule } from './anime/anime.module';
       csrfPrevention: {
         requestHeaders: [],
       },
+      playground: true,
     }),
     UserModule,
     RecommendationModule,
