@@ -36,6 +36,12 @@ Once you've installed all the dependencies and set up Prisma, you can run the AP
   $ npm run start
   ```
 
+After starting the API, you can access the GraphQL playground in your web browser by going to:
+```
+http://localhost:3000/graphql
+```
+This URL can be used in both development and production modes to interact with the API using GraphQL queries and mutations.
+
 ## 📜 License
 
 This project is under the [MIT license](LICENSE). You can check the license file for more details.
