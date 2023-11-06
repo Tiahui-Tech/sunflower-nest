@@ -60,7 +60,7 @@ export class Anime {
   imageURL: string;
 
   @Field()
-  trailerURL: string;
+  trailerURL?: string;
 
   @Field(() => [Tag], { nullable: true })
   tags?: Tag[];
