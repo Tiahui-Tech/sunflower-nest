@@ -107,7 +107,7 @@ model Anime {
   episodesCount Int
   castMembers   CastOnAnime[]
   staffMembers  StaffOnAnime[]
-  rating        Float
+  rating        Float            @default(0)
   totalVotes    Int              @default(0)
   viewCount     Int              @default(0)
   savedBy       UserAnimeSaved[]
