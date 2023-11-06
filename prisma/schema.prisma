@@ -99,7 +99,7 @@ model Anime {
   airedFrom     DateTime
   airedTo       DateTime
   imageURL      String
-  trailerURL    String
+  trailerURL    String?
   tags          Tag[]
   genres        Genre[]
   reviews       Review[]
