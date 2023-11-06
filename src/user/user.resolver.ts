@@ -39,7 +39,7 @@ export class UserResolver {
     return await this.userService.update(id, updatedFields);
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => UserModel)
   async deleteUser(@Args('id') id: number): Promise<User> {
     return await this.userService.delete(id);
   }
