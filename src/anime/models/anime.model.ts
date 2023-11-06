@@ -128,6 +128,6 @@ export class CreateAnimeInput {
   @Field(() => String, { nullable: true })
   trailerURL?: string;
 
-  @Field(() => Int, { nullable: true })
-  episodesCount?: number;
+  @Field(() => Int)
+  episodesCount: number;
 }
