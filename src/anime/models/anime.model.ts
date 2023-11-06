@@ -41,23 +41,23 @@ export class Anime {
   @Field()
   title: string;
 
-  @Field()
-  titleJapan: string;
+  @Field({ nullable: true })
+  titleJapan?: string;
 
-  @Field()
-  synopsis: string;
+  @Field({ nullable: true })
+  synopsis?: string;
 
-  @Field(() => AnimeStatus)
-  status: AnimeStatus;
+  @Field(() => AnimeStatus, { nullable: true })
+  status?: AnimeStatus;
 
-  @Field()
-  airedFrom: Date;
+  @Field({ nullable: true })
+  airedFrom?: Date;
 
-  @Field()
-  airedTo: Date;
+  @Field({ nullable: true })
+  airedTo?: Date;
 
-  @Field()
-  imageURL: string;
+  @Field({ nullable: true })
+  imageURL?: string;
 
   @Field({ nullable: true })
   trailerURL?: string;
@@ -107,27 +107,27 @@ export class CreateAnimeInput {
   @Field(() => String)
   title: string;
 
-  @Field(() => String)
-  titleJapan: string;
+  @Field(() => String, { nullable: true })
+  titleJapan?: string;
 
-  @Field(() => String)
-  synopsis: string;
+  @Field(() => String, { nullable: true })
+  synopsis?: string;
 
-  @Field(() => AnimeStatus)
-  status: AnimeStatus;
+  @Field(() => AnimeStatus, { nullable: true })
+  status?: AnimeStatus;
 
-  @Field(() => Date)
-  airedFrom: Date;
+  @Field(() => Date, { nullable: true })
+  airedFrom?: Date;
 
-  @Field(() => Date)
-  airedTo: Date;
+  @Field(() => Date, { nullable: true })
+  airedTo?: Date;
 
-  @Field(() => String)
-  imageURL: string;
+  @Field(() => String, { nullable: true })
+  imageURL?: string;
 
   @Field(() => String, { nullable: true })
   trailerURL?: string;
 
-  @Field(() => Int)
-  episodesCount: number;
+  @Field(() => Int, { nullable: true })
+  episodesCount?: number;
 }

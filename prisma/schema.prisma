@@ -35,8 +35,8 @@ model User {
   id               Int              @id @unique @default(autoincrement())
   email            String           @unique @db.VarChar(255)
   username         String           @unique @db.VarChar(12)
-  avatarURL        String
-  gender           Gender
+  avatarURL        String?
+  gender           Gender?
   followersCount   Int              @default(0)
   followingCount   Int              @default(0)
   savedAnimesCount Int              @default(0)
@@ -93,18 +93,18 @@ model Tag {
 model Anime {
   id            Int              @id @default(autoincrement())
   title         String
-  titleJapan    String
-  synopsis      String
-  status        AnimeStatus
-  airedFrom     DateTime
-  airedTo       DateTime
-  imageURL      String
+  titleJapan    String?
+  synopsis      String?
+  status        AnimeStatus?
+  airedFrom     DateTime?
+  airedTo       DateTime?
+  imageURL      String?
   trailerURL    String?
   tags          Tag[]
   genres        Genre[]
   reviews       Review[]
   episodes      Episode[]
-  episodesCount Int
+  episodesCount Int              @default(0)
   castMembers   CastOnAnime[]
   staffMembers  StaffOnAnime[]
   rating        Float            @default(0)
@@ -150,7 +150,7 @@ model Review {
   userId  Int
   anime   Anime  @relation(fields: [animeId], references: [id])
   animeId Int
-  review  String
+  review  String?
   score   Int
 
   createdAt DateTime @default(now())
@@ -166,9 +166,9 @@ model Episode {
   animeId    Int
   episode    Int
   title      String
-  titleJapan String
-  aired      DateTime
-  score      Int
+  titleJapan String?
+  aired      DateTime?
+  score      Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -180,9 +180,9 @@ model Episode {
 model CastMember {
   id              Int           @id @default(autoincrement())
   actor           String
-  actorImgURL     String
+  actorImgURL     String?
   character       String
-  characterImgURL String
+  characterImgURL String?
   animes          CastOnAnime[]
 
   createdAt DateTime @default(now())
@@ -195,7 +195,7 @@ model CastMember {
 model StaffMember {
   id     Int            @id @default(autoincrement())
   name   String
-  imgURL String
+  imgURL String?
   animes StaffOnAnime[]
 
   createdAt DateTime @default(now())
@@ -219,7 +219,7 @@ model StaffOnAnime {
   staff   StaffMember @relation(fields: [staffId], references: [id])
   anime   Anime       @relation(fields: [animeId], references: [id])
 
-  position String
+  position String?
 
   @@id([staffId, animeId])
 }

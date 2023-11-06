@@ -34,8 +34,8 @@ export class User {
   @Field({ nullable: true })
   avatarURL?: string;
 
-  @Field(() => Gender)
-  gender: Gender;
+  @Field(() => Gender, { nullable: true })
+  gender?: Gender;
 
   @Field(() => Int)
   followersCount: number;
@@ -76,11 +76,15 @@ export class User {
 
 @InputType()
 export class CreateUserInput {
+  @Field()
   email: string;
 
+  @Field()
   username: string;
 
+  @Field({ nullable: true })
   avatarURL?: string;
 
-  gender: Gender;
+  @Field(() => Gender, { nullable: true })
+  gender?: Gender;
 }
