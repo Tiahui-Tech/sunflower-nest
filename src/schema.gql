@@ -1,0 +1,177 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Tag {
+  id: Int!
+  name: String!
+  animes: [Anime!]
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Review {
+  id: Int!
+  user: User!
+  userId: Int!
+  anime: Anime!
+  animeId: Int!
+  content: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Episode {
+  id: Int!
+  anime: Anime!
+  animeId: Int!
+  episode: Int!
+  title: String!
+  titleJapan: String!
+  aired: DateTime!
+  score: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CastMember {
+  id: Int!
+  actor: String!
+  actorImgURL: String!
+  character: String!
+  characterImgURL: String!
+  animes: [CastOnAnime!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CastOnAnime {
+  castId: Int!
+  animeId: Int!
+  cast: CastMember!
+  anime: Anime!
+}
+
+type UserAnimeLiked {
+  userId: Int!
+  animeId: Int!
+  user: User!
+  anime: Anime!
+  createdAt: DateTime!
+}
+
+type Anime {
+  id: Int!
+  title: String!
+  titleJapan: String!
+  synopsis: String!
+  status: AnimeStatus!
+  airedFrom: DateTime!
+  airedTo: DateTime!
+  imageURL: String!
+  trailerURL: String
+  tags: [Tag!]
+  genres: [Genre!]
+  reviews: [Review!]
+  episodes: [Episode!]
+  episodesCount: Int!
+  castMembers: [CastOnAnime!]
+  rating: Float!
+  totalVotes: Int!
+  viewCount: Int!
+  savedBy: [UserAnimeSaved!]
+  likedBy: [UserAnimeLiked!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum AnimeStatus {
+  ONGOING
+  FINISHED
+  UPCOMING
+  HIATUS
+  ON_BREAK
+  DROPPED
+}
+
+type Genre {
+  id: Int!
+  name: String!
+  animes: [Anime!]
+  createdAt: DateTime!
+}
+
+type UserAnimeSaved {
+  userId: Int!
+  genreId: Int!
+  user: User!
+  genre: Genre!
+  createdAt: DateTime!
+}
+
+type Follower {
+  id: Int!
+  followingId: Int!
+  following: User!
+  followerId: Int!
+  follower: User!
+  createdAt: DateTime!
+}
+
+type User {
+  id: Int!
+  email: String!
+  username: String!
+  avatarURL: String
+  gender: Gender!
+  followersCount: Int!
+  followingCount: Int!
+  savedAnimesCount: Int!
+  likedAnimesCount: Int!
+  reviewsCount: Int!
+  savedAnimes: [UserAnimeSaved!]
+  likedAnimes: [UserAnimeLiked!]
+  following: [Follower!]
+  followers: [Follower!]
+  reviews: [Review!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  NON_BINARY
+}
+
+type Query {
+  getUsers: [User!]
+  getUserById(id: Float!): User
+  getAnimeRecommendations(userId: Float!, animeCount: Float!): [Anime!]!
+  getAllAnimes: [Anime!]
+  getTopAnime: [Anime!]
+  getAnimeById(id: Float!): Anime
+}
+
+type Mutation {
+  createUser(email: String!, username: String!, avatarURL: String!, gender: String!): User!
+  updateUser(id: Float!, email: String, username: String): User
+  deleteUser(id: Float!): Boolean!
+  createAnime(input: CreateAnimeInput!): Anime
+}
+
+input CreateAnimeInput {
+  title: String!
+  titleJapan: String!
+  synopsis: String!
+  status: AnimeStatus!
+  airedFrom: DateTime!
+  airedTo: DateTime!
+  imageURL: String!
+  trailerURL: String!
+  episodesCount: Int!
+}
