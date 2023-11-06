@@ -7,7 +7,7 @@ export class AnimeService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll(): Promise<Anime[]> {
-    return this.prisma.anime.findMany();
+    return (await this.prisma.anime.findMany()).sort((a, b) => a.id - b.id);
   }
 
   async findTopAnime(): Promise<Anime[]> {
