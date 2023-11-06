@@ -16,6 +16,6 @@ export class StaffOnAnime {
   @Field(() => Anime)
   anime: Anime;
 
-  @Field()
-  position: string;
+  @Field({ nullable: true })
+  position?: string;
 }

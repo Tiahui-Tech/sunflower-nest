@@ -9,14 +9,14 @@ export class CastMember {
   @Field()
   actor: string;
 
-  @Field()
-  actorImgURL: string;
+  @Field({ nullable: true })
+  actorImgURL?: string;
 
   @Field()
   character: string;
 
-  @Field()
-  characterImgURL: string;
+  @Field({ nullable: true })
+  characterImgURL?: string;
 
   @Field(() => [CastOnAnime], { nullable: true })
   animes?: CastOnAnime[];

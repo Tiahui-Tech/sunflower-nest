@@ -18,13 +18,13 @@ export class Episode {
   @Field()
   title: string;
 
-  @Field()
-  titleJapan: string;
+  @Field({ nullable: true })
+  titleJapan?: string;
 
-  @Field()
+  @Field({ nullable: true })
   aired: Date;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   score: number;
 
   @Field()

@@ -9,8 +9,8 @@ export class StaffMember {
   @Field()
   name: string;
 
-  @Field()
-  imgURL: string;
+  @Field({ nullable: true })
+  imgURL?: string;
 
   @Field(() => [StaffOnAnime], { nullable: true })
   animes?: StaffOnAnime[];
