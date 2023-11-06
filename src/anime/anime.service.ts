@@ -7,16 +7,22 @@ export class AnimeService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll(): Promise<Anime[]> {
-    return (await this.prisma.anime.findMany()).sort((a, b) => a.id - b.id);
+    const allAnimes = await this.prisma.anime.findMany();
+    const sortedAnimes = allAnimes.sort((a, b) => a.id - b.id);
+
+    return sortedAnimes;
   }
 
   async findTopAnime(): Promise<Anime[]> {
-    return this.prisma.anime.findMany({
+    const topAnimes = await this.prisma.anime.findMany({
       orderBy: {
         viewCount: 'desc',
       },
       take: 10,
     });
+    const sortedAnimes = topAnimes.sort((a, b) => b.viewCount - a.viewCount);
+
+    return sortedAnimes;
   }
 
   async findById(id: number): Promise<Anime> {
@@ -29,6 +35,17 @@ export class AnimeService {
 
   async create(input: Prisma.AnimeCreateInput): Promise<Anime> {
     return this.prisma.anime.create({ data: input });
+  }
+
+  async update(id: number, input: Prisma.AnimeUpdateInput): Promise<Anime> {
+    const anime = await this.prisma.anime.findUnique({ where: { id } });
+    if (anime) {
+      await this.prisma.anime.update({ where: { id }, data: input });
+    } else {
+      throw new NotFoundException(`Anime with ID ${id} not found`);
+    }
+
+    return anime;
   }
 
   async delete(id: number): Promise<Anime> {

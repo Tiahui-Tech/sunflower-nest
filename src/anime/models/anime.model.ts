@@ -13,6 +13,7 @@ import { Episode } from './episode.model';
 import { CastOnAnime } from './cast-on-anime.model';
 import { UserAnimeLiked } from 'src/user/models/user-anime-liked.model';
 import { UserAnimeSaved } from 'src/user/models/user-anime-saved.model';
+import { StaffOnAnime } from './staff-on-anime.model';
 
 enum AnimeStatus {
   /// Anime is currently on air.
@@ -80,6 +81,9 @@ export class Anime {
   @Field(() => [CastOnAnime], { nullable: true })
   castMembers?: CastOnAnime[];
 
+  @Field(() => [StaffOnAnime], { nullable: true })
+  staffMembers?: StaffOnAnime[];
+
   @Field(() => Float)
   rating: number;
 
@@ -130,4 +134,43 @@ export class CreateAnimeInput {
 
   @Field(() => Int)
   episodesCount: number;
+}
+
+@InputType()
+export class UpdateAnimeInput {
+  @Field(() => Int)
+  id: number;
+
+  @Field(() => String, { nullable: true })
+  title?: string;
+
+  @Field(() => String, { nullable: true })
+  titleJapan?: string;
+
+  @Field(() => String, { nullable: true })
+  synopsis?: string;
+
+  @Field(() => AnimeStatus, { nullable: true })
+  status?: AnimeStatus;
+
+  @Field(() => String, { nullable: true })
+  airedFrom?: Date;
+
+  @Field(() => String, { nullable: true })
+  airedTo?: Date;
+
+  @Field(() => String, { nullable: true })
+  imageURL?: string;
+
+  @Field(() => String, { nullable: true })
+  trailerURL?: string;
+
+  @Field(() => Int, { nullable: true })
+  episodesCount?: number;
+
+  @Field(() => Float, { nullable: true })
+  rating?: number;
+
+  @Field(() => Int, { nullable: true })
+  totalVotes?: number;
 }
