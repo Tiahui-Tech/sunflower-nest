@@ -138,9 +138,6 @@ export class CreateAnimeInput {
 
 @InputType()
 export class UpdateAnimeInput {
-  @Field(() => Int)
-  id: number;
-
   @Field(() => String, { nullable: true })
   title?: string;
 
