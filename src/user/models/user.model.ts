@@ -1,6 +1,12 @@
-import { Field, ObjectType, Int, registerEnumType } from '@nestjs/graphql';
-import { UserGenreFans } from './user-genre-fans.model';
-import { UserAnimeFans } from './user-anime-fans.model';
+import {
+  Field,
+  ObjectType,
+  Int,
+  registerEnumType,
+  InputType,
+} from '@nestjs/graphql';
+import { UserAnimeSaved } from './user-anime-saved.model';
+import { UserAnimeLiked } from './user-anime-liked.model';
 import { Follower } from './follower.model';
 import { Review } from './review.model';
 
@@ -38,16 +44,19 @@ export class User {
   followingCount: number;
 
   @Field(() => Int)
-  animesCount: number;
+  savedAnimesCount: number;
+
+  @Field(() => Int)
+  likedAnimesCount: number;
 
   @Field(() => Int)
   reviewsCount: number;
 
-  @Field(() => [UserGenreFans], { nullable: true })
-  favoriteGenres?: UserGenreFans[];
+  @Field(() => [UserAnimeSaved], { nullable: true })
+  savedAnimes?: UserAnimeSaved[];
 
-  @Field(() => [UserAnimeFans], { nullable: true })
-  favoriteAnimes?: UserAnimeFans[];
+  @Field(() => [UserAnimeLiked], { nullable: true })
+  likedAnimes?: UserAnimeLiked[];
 
   @Field(() => [Follower], { nullable: true })
   following?: Follower[];
@@ -63,4 +72,15 @@ export class User {
 
   @Field()
   updatedAt: Date;
+}
+
+@InputType()
+export class CreateUserInput {
+  email: string;
+
+  username: string;
+
+  avatarURL?: string;
+
+  gender: Gender;
 }

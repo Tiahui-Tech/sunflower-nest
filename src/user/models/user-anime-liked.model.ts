@@ -3,7 +3,7 @@ import { User } from './user.model';
 import { Anime } from 'src/anime/models/anime.model';
 
 @ObjectType()
-export class UserAnimeFans {
+export class UserAnimeLiked {
   @Field(() => Int)
   userId: number;
 

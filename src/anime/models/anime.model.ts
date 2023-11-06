@@ -4,14 +4,15 @@ import {
   Int,
   Float,
   registerEnumType,
-  InputType
+  InputType,
 } from '@nestjs/graphql';
 import { Tag } from './tag.model';
 import { Genre } from './genre.model';
 import { Review } from 'src/user/models/review.model';
 import { Episode } from './episode.model';
 import { CastOnAnime } from './cast-on-anime.model';
-import { UserAnimeFans } from 'src/user/models/user-anime-fans.model';
+import { UserAnimeLiked } from 'src/user/models/user-anime-liked.model';
+import { UserAnimeSaved } from 'src/user/models/user-anime-saved.model';
 
 enum AnimeStatus {
   /// Anime is currently on air.
@@ -41,10 +42,19 @@ export class Anime {
   title: string;
 
   @Field()
+  titleJapan: string;
+
+  @Field()
   synopsis: string;
 
   @Field(() => AnimeStatus)
   status: AnimeStatus;
+
+  @Field()
+  airedFrom: Date;
+
+  @Field()
+  airedTo: Date;
 
   @Field()
   imageURL: string;
@@ -64,6 +74,9 @@ export class Anime {
   @Field(() => [Episode], { nullable: true })
   episodes?: Episode[];
 
+  @Field(() => Int)
+  episodesCount: number;
+
   @Field(() => [CastOnAnime], { nullable: true })
   castMembers?: CastOnAnime[];
 
@@ -76,8 +89,11 @@ export class Anime {
   @Field(() => Int)
   viewCount: number;
 
-  @Field(() => [UserAnimeFans], { nullable: true })
-  fans?: UserAnimeFans[];
+  @Field(() => [UserAnimeSaved], { nullable: true })
+  savedBy?: UserAnimeSaved[];
+
+  @Field(() => [UserAnimeLiked], { nullable: true })
+  likedBy?: UserAnimeLiked[];
 
   @Field()
   createdAt: Date;
@@ -115,4 +131,3 @@ export class CreateAnimeInput {
   @Field(() => Int)
   episodesCount: number;
 }
-

@@ -1,6 +1,6 @@
 import { Field, ObjectType, Int } from '@nestjs/graphql';
 import { Anime } from './anime.model';
-import { UserGenreFans } from 'src/user/models/user-genre-fans.model';
+import { UserGenreFans } from 'src/user/models/user-anime-saved.model';
 
 @ObjectType()
 export class Genre {

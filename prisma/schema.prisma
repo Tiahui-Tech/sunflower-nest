@@ -193,12 +193,10 @@ model CastMember {
 
 /// Represents a staff member of an anime.
 model StaffMember {
-  id              Int            @id @default(autoincrement())
-  actor           String
-  actorImgURL     String
-  character       String
-  characterImgURL String
-  animes          StaffOnAnime[]
+  id     Int            @id @default(autoincrement())
+  name   String
+  imgURL String
+  animes StaffOnAnime[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -220,6 +218,8 @@ model StaffOnAnime {
   animeId Int
   staff   StaffMember @relation(fields: [staffId], references: [id])
   anime   Anime       @relation(fields: [animeId], references: [id])
+
+  position String
 
   @@id([staffId, animeId])
 }
