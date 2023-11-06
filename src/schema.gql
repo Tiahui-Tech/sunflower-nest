@@ -172,6 +172,6 @@ input CreateAnimeInput {
   airedFrom: DateTime!
   airedTo: DateTime!
   imageURL: String!
-  trailerURL: String!
+  trailerURL: String
   episodesCount: Int!
 }

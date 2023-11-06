@@ -59,7 +59,7 @@ export class Anime {
   @Field()
   imageURL: string;
 
-  @Field()
+  @Field({ nullable: true })
   trailerURL?: string;
 
   @Field(() => [Tag], { nullable: true })
@@ -125,8 +125,8 @@ export class CreateAnimeInput {
   @Field(() => String)
   imageURL: string;
 
-  @Field(() => String)
-  trailerURL: string;
+  @Field(() => String, { nullable: true })
+  trailerURL?: string;
 
   @Field(() => Int)
   episodesCount: number;
