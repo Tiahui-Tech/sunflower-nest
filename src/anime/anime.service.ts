@@ -30,4 +30,15 @@ export class AnimeService {
   async create(input: Prisma.AnimeCreateInput): Promise<Anime> {
     return this.prisma.anime.create({ data: input });
   }
+
+  async delete(id: number): Promise<Anime> {
+    const anime = await this.prisma.anime.findUnique({ where: { id } });
+    if (anime) {
+      await this.prisma.anime.delete({ where: { id } });
+    } else {
+      throw new NotFoundException(`Anime with ID ${id} not found`);
+    }
+
+    return anime;
+  }
 }

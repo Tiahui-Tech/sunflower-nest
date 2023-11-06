@@ -26,4 +26,9 @@ export class AnimeResolver {
   async createAnime(@Args('input') input: CreateAnimeInput): Promise<Anime> {
     return this.animeService.create(input);
   }
+
+  @Mutation(() => Boolean)
+  async deleteAnime(@Args('id') id: number): Promise<Anime> {
+    return await this.animeService.delete(id);
+  }
 }
