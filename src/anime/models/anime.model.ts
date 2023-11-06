@@ -4,6 +4,7 @@ import {
   Int,
   Float,
   registerEnumType,
+  InputType
 } from '@nestjs/graphql';
 import { Tag } from './tag.model';
 import { Genre } from './genre.model';
@@ -84,3 +85,34 @@ export class Anime {
   @Field()
   updatedAt: Date;
 }
+
+@InputType()
+export class CreateAnimeInput {
+  @Field(() => String)
+  title: string;
+
+  @Field(() => String)
+  titleJapan: string;
+
+  @Field(() => String)
+  synopsis: string;
+
+  @Field(() => AnimeStatus)
+  status: AnimeStatus;
+
+  @Field(() => Date)
+  airedFrom: Date;
+
+  @Field(() => Date)
+  airedTo: Date;
+
+  @Field(() => String)
+  imageURL: string;
+
+  @Field(() => String)
+  trailerURL: string;
+
+  @Field(() => Int)
+  episodesCount: number;
+}
+

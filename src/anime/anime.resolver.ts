@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { AnimeService } from './anime.service';
 import { Anime, AnimeStatus, Prisma } from '@prisma/client';
-import { Anime as AnimeModel } from './models/anime.model';
+import { Anime as AnimeModel, CreateAnimeInput } from './models/anime.model';
 
 @Resolver()
 export class AnimeResolver {
@@ -23,30 +23,7 @@ export class AnimeResolver {
   }
 
   @Mutation(() => AnimeModel, { nullable: true })
-  async createAnime(
-    @Args('title') title: string,
-    @Args('titleJapan') titleJapan: string,
-    @Args('synopsis') synopsis: string,
-    @Args('status') status: AnimeStatus,
-    @Args('imageURL') imageURL: string,
-    @Args('trailerURL') trailerURL: string,
-    @Args('rating') rating: number,
-    @Args('airedFrom') airedFrom: string,
-    @Args('airedTo') airedTo: string,
-    @Args('episodesCount') episodesCount: number,
-  ): Promise<Anime> {
-    const newAnime = {
-      title,
-      titleJapan,
-      synopsis,
-      status,
-      imageURL,
-      trailerURL,
-      rating,
-      airedFrom,
-      airedTo,
-      episodesCount,
-    };
-    return this.animeService.create(newAnime);
+  async createAnime(@Args('input') input: CreateAnimeInput): Promise<Anime> {
+    return this.animeService.create(input);
   }
 }
