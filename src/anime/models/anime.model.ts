@@ -170,4 +170,7 @@ export class UpdateAnimeInput {
 
   @Field(() => Int, { nullable: true })
   totalVotes?: number;
+
+  @Field(() => Int, { nullable: true })
+  viewCount?: number;
 }
