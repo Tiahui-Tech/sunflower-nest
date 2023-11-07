@@ -8,7 +8,7 @@ export class AnimeService {
 
   async findAll(limit?: number): Promise<Anime[]> {
     const allAnimes = await this.prisma.anime.findMany({
-      take: limit,
+      ...(limit > 0 && { take: limit }),
     });
     const sortedAnimes = allAnimes.sort((a, b) => a.id - b.id);
 

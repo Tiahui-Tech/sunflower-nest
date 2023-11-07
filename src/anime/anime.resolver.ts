@@ -12,7 +12,9 @@ export class AnimeResolver {
   constructor(private animeService: AnimeService) {}
 
   @Query(() => [AnimeModel], { nullable: true })
-  async getAllAnimes(@Args('limit') limit?: number): Promise<Anime[]> {
+  async getAllAnimes(
+    @Args('limit', { nullable: true }) limit?: number,
+  ): Promise<Anime[]> {
     return this.animeService.findAll(limit);
   }
 
