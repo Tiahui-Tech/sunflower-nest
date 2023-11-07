@@ -6,7 +6,7 @@ import { Anime, Prisma } from '@prisma/client';
 export class AnimeService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(limit: number): Promise<Anime[]> {
+  async findAll(limit?: number): Promise<Anime[]> {
     const allAnimes = await this.prisma.anime.findMany({
       take: limit,
     });
