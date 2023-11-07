@@ -6,8 +6,10 @@ import { Anime, Prisma } from '@prisma/client';
 export class AnimeService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(): Promise<Anime[]> {
-    const allAnimes = await this.prisma.anime.findMany();
+  async findAll(animeCount: number): Promise<Anime[]> {
+    const allAnimes = await this.prisma.anime.findMany({
+      take: animeCount,
+    });
     const sortedAnimes = allAnimes.sort((a, b) => a.id - b.id);
 
     return sortedAnimes;

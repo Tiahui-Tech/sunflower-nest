@@ -12,8 +12,8 @@ export class AnimeResolver {
   constructor(private animeService: AnimeService) {}
 
   @Query(() => [AnimeModel], { nullable: true })
-  async getAllAnimes(): Promise<Anime[]> {
-    return this.animeService.findAll();
+  async getAllAnimes(@Args('animeCount') animeCount: number): Promise<Anime[]> {
+    return this.animeService.findAll(animeCount);
   }
 
   @Query(() => [AnimeModel], { nullable: true })
