@@ -1,73 +1,47 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+<div align='center'>
+  <img src='https://i.imgur.com/DJOtiMD.png' alt='Sunflower Banner' />
+</div>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Welcome to the Sunflower API project. This API is developed using [NestJS](https://github.com/nestjs/nest), a powerful Node.js framework for building efficient and scalable server-side applications. It's integrated with GraphQL for streamlined queries and Prisma as an ORM to interact with the database.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🌼 Description
 
-## Description
+The API is designed to provide anime recommendations based on various criteria. Users can search for animes by genre, popularity, rating, and more. Additionally, the API offers specific details about each anime, such as synopsis, episodes, main characters, and more.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🌱 Installation
 
-## Installation
+Follow these steps to install and set up the project on your local machine:
 
-```bash
-$ npm install
+1. **Install Dependencies**: Before starting, ensure you have Node.js and npm installed on your machine. Then, install all the project's dependencies with:
+   ```bash
+   $ npm install
+   ```
+
+2. **Generate Prisma Types**: For the API to interact correctly with the database, it's essential to generate the Prisma types. Run the following command:
+   ```bash
+   $ npx prisma generate
+   ```
+
+## 🚀 Running the API
+
+Once you've installed all the dependencies and set up Prisma, you can run the API in the following ways:
+
+- **Development Mode**: Run the API in development mode. This will automatically restart the server every time you make a change to the code.
+  ```bash
+  $ npm run start:dev
+  ```
+
+- **Production Mode**: If you wish to run the API in production mode, use the following command:
+  ```bash
+  $ npm run start
+  ```
+
+After starting the API, you can access the GraphQL playground in your web browser by going to:
 ```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+http://localhost:3000/graphql
 ```
+This URL can be used in both development and production modes to interact with the API using GraphQL queries and mutations.
 
-## Test
+## 📜 License
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+This project is under the [MIT license](LICENSE). You can check the license file for more details.

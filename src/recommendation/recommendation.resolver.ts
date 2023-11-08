@@ -1,12 +1,13 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
 import { RecommendationService } from './recommendation.service';
-import { Anime } from 'src/@generated/anime/anime.model';
+import { Anime } from '@prisma/client';
+import { Anime as AnimeModel } from 'src/anime/models/anime.model';
 
 @Resolver()
 export class RecommendationResolver {
   constructor(private readonly recommendationService: RecommendationService) {}
 
-  @Query(() => [Anime])
+  @Query(() => [AnimeModel])
   async getAnimeRecommendations(
     @Args('userId') userId: number,
     @Args('animeCount') animeCount: number,

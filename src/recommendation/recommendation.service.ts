@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Anime } from 'src/@generated/anime/anime.model';
+import { Anime } from '@prisma/client'; 
 
 @Injectable()
 export class RecommendationService {
