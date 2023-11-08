@@ -13,8 +13,8 @@ export class RecommendationService {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: {
-        favoriteGenres: true,
-        favoriteAnimes: true,
+        likedAnimes: true,
+        savedAnimes: true,
       },
     });
 
@@ -22,7 +22,7 @@ export class RecommendationService {
       throw new NotFoundException('User not found');
     }
 
-    const genreIds = user.favoriteGenres.map((genre) => genre.genreId);
+    const genreIds = user.savedAnimes.map((anime) => anime.animeId);
 
     return this.prisma.anime.findMany({
       where: {

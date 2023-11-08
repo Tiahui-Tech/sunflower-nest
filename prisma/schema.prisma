@@ -32,20 +32,21 @@ enum AnimeStatus {
 
 /// Represents a user or profile.
 model User {
-  id             Int             @id @unique @default(autoincrement())
-  email          String          @unique @db.VarChar(255)
-  username       String          @unique @db.VarChar(12)
-  avatarURL      String
-  gender         Gender
-  followersCount Int             @default(0)
-  followingCount Int             @default(0)
-  animesCount    Int             @default(0)
-  reviewsCount   Int             @default(0)
-  favoriteGenres UserGenreFans[]
-  favoriteAnimes UserAnimeFans[]
-  following      Follower[]      @relation("FollowingUsers")
-  followers      Follower[]      @relation("UserFollowers")
-  reviews        Review[]
+  id               Int              @id @unique @default(autoincrement())
+  email            String           @unique @db.VarChar(255)
+  username         String           @unique @db.VarChar(12)
+  avatarURL        String?
+  gender           Gender?
+  followersCount   Int              @default(0)
+  followingCount   Int              @default(0)
+  savedAnimesCount Int              @default(0)
+  likedAnimesCount Int              @default(0)
+  reviewsCount     Int              @default(0)
+  savedAnimes      UserAnimeSaved[]
+  likedAnimes      UserAnimeLiked[]
+  following        Follower[]       @relation("FollowingUsers")
+  followers        Follower[]       @relation("UserFollowers")
+  reviews          Review[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -68,10 +69,9 @@ model Follower {
 
 /// Represents a genre of anime.
 model Genre {
-  id     Int             @id @default(autoincrement())
+  id     Int     @id @default(autoincrement())
   name   String
   animes Anime[]
-  fans   UserGenreFans[]
 
   createdAt DateTime @default(now())
 
@@ -91,21 +91,27 @@ model Tag {
 
 /// Represents an individual anime.
 model Anime {
-  id          Int             @id @default(autoincrement())
-  title       String
-  synopsis    String
-  status      AnimeStatus
-  imageURL    String
-  trailerURL  String
-  tags        Tag[]
-  genres      Genre[]
-  reviews     Review[]
-  episodes    Episode[]
-  castMembers CastOnAnime[]
-  rating      Float
-  totalVotes  Int             @default(0)
-  viewCount   Int             @default(0)
-  fans        UserAnimeFans[]
+  id            Int              @id @default(autoincrement())
+  title         String
+  titleJapan    String?
+  synopsis      String?
+  status        AnimeStatus?
+  airedFrom     DateTime?
+  airedTo       DateTime?
+  imageURL      String?
+  trailerURL    String?
+  tags          Tag[]
+  genres        Genre[]
+  reviews       Review[]
+  episodes      Episode[]
+  episodesCount Int              @default(0)
+  castMembers   CastOnAnime[]
+  staffMembers  StaffOnAnime[]
+  rating        Float            @default(0)
+  totalVotes    Int              @default(0)
+  viewCount     Int              @default(0)
+  savedBy       UserAnimeSaved[]
+  likedBy       UserAnimeLiked[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -113,8 +119,8 @@ model Anime {
   @@index([id])
 }
 
-/// Intermediate model connecting a user and an anime they are a fan of.
-model UserAnimeFans {
+/// Intermediate model that connects a user to an anime they saved.
+model UserAnimeSaved {
   userId  Int
   animeId Int
   user    User  @relation(fields: [userId], references: [id])
@@ -125,16 +131,16 @@ model UserAnimeFans {
   @@id([userId, animeId])
 }
 
-/// Intermediate model connecting a user and a genre they are a fan of.
-model UserGenreFans {
+/// Intermediate model connecting user and an anime they are liked of.
+model UserAnimeLiked {
   userId  Int
-  genreId Int
+  animeId Int
   user    User  @relation(fields: [userId], references: [id])
-  genre   Genre @relation(fields: [genreId], references: [id])
+  anime   Anime @relation(fields: [animeId], references: [id])
 
   createdAt DateTime @default(now())
 
-  @@id([userId, genreId])
+  @@id([userId, animeId])
 }
 
 /// Represents a review of an anime.
@@ -144,7 +150,8 @@ model Review {
   userId  Int
   anime   Anime  @relation(fields: [animeId], references: [id])
   animeId Int
-  content String
+  review  String?
+  score   Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -154,13 +161,14 @@ model Review {
 
 /// Represents an episode of an anime.
 model Episode {
-  id       Int    @id @default(autoincrement())
-  anime    Anime  @relation(fields: [animeId], references: [id])
-  animeId  Int
-  season   Int
-  coverURL String
-  title    String
-  duration Int
+  id         Int      @id @default(autoincrement())
+  anime      Anime    @relation(fields: [animeId], references: [id])
+  animeId    Int
+  episode    Int
+  title      String
+  titleJapan String?
+  aired      DateTime?
+  score      Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -170,11 +178,25 @@ model Episode {
 
 /// Represents a cast member of an anime.
 model CastMember {
-  id        Int           @id @default(autoincrement())
-  name      String
-  character String
-  coverURL  String
-  animes    CastOnAnime[]
+  id              Int           @id @default(autoincrement())
+  actor           String
+  actorImgURL     String?
+  character       String
+  characterImgURL String?
+  animes          CastOnAnime[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([id])
+}
+
+/// Represents a staff member of an anime.
+model StaffMember {
+  id     Int            @id @default(autoincrement())
+  name   String
+  imgURL String?
+  animes StaffOnAnime[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -189,4 +211,15 @@ model CastOnAnime {
   anime   Anime      @relation(fields: [animeId], references: [id])
 
   @@id([castId, animeId])
+}
+
+model StaffOnAnime {
+  staffId Int
+  animeId Int
+  staff   StaffMember @relation(fields: [staffId], references: [id])
+  anime   Anime       @relation(fields: [animeId], references: [id])
+
+  position String?
+
+  @@id([staffId, animeId])
 }

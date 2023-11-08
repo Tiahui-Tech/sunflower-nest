@@ -13,7 +13,8 @@ CREATE TABLE "User" (
     "gender" "Gender" NOT NULL,
     "followersCount" INTEGER NOT NULL DEFAULT 0,
     "followingCount" INTEGER NOT NULL DEFAULT 0,
-    "animesCount" INTEGER NOT NULL DEFAULT 0,
+    "savedAnimesCount" INTEGER NOT NULL DEFAULT 0,
+    "likedAnimesCount" INTEGER NOT NULL DEFAULT 0,
     "reviewsCount" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -53,11 +54,15 @@ CREATE TABLE "Tag" (
 CREATE TABLE "Anime" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
+    "titleJapan" TEXT NOT NULL,
     "synopsis" TEXT NOT NULL,
     "status" "AnimeStatus" NOT NULL,
+    "airedFrom" TIMESTAMP(3) NOT NULL,
+    "airedTo" TIMESTAMP(3) NOT NULL,
     "imageURL" TEXT NOT NULL,
     "trailerURL" TEXT NOT NULL,
-    "rating" DOUBLE PRECISION NOT NULL,
+    "episodesCount" INTEGER NOT NULL,
+    "rating" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "totalVotes" INTEGER NOT NULL DEFAULT 0,
     "viewCount" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -67,21 +72,21 @@ CREATE TABLE "Anime" (
 );
 
 -- CreateTable
-CREATE TABLE "UserAnimeFans" (
+CREATE TABLE "UserAnimeSaved" (
     "userId" INTEGER NOT NULL,
     "animeId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "UserAnimeFans_pkey" PRIMARY KEY ("userId","animeId")
+    CONSTRAINT "UserAnimeSaved_pkey" PRIMARY KEY ("userId","animeId")
 );
 
 -- CreateTable
-CREATE TABLE "UserGenreFans" (
+CREATE TABLE "UserAnimeLiked" (
     "userId" INTEGER NOT NULL,
-    "genreId" INTEGER NOT NULL,
+    "animeId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "UserGenreFans_pkey" PRIMARY KEY ("userId","genreId")
+    CONSTRAINT "UserAnimeLiked_pkey" PRIMARY KEY ("userId","animeId")
 );
 
 -- CreateTable
@@ -89,7 +94,8 @@ CREATE TABLE "Review" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "animeId" INTEGER NOT NULL,
-    "content" TEXT NOT NULL,
+    "review" TEXT NOT NULL,
+    "score" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -100,10 +106,11 @@ CREATE TABLE "Review" (
 CREATE TABLE "Episode" (
     "id" SERIAL NOT NULL,
     "animeId" INTEGER NOT NULL,
-    "season" INTEGER NOT NULL,
-    "coverURL" TEXT NOT NULL,
+    "episode" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
-    "duration" INTEGER NOT NULL,
+    "titleJapan" TEXT NOT NULL,
+    "aired" TIMESTAMP(3) NOT NULL,
+    "score" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -113,13 +120,25 @@ CREATE TABLE "Episode" (
 -- CreateTable
 CREATE TABLE "CastMember" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
+    "actor" TEXT NOT NULL,
+    "actorImgURL" TEXT NOT NULL,
     "character" TEXT NOT NULL,
-    "coverURL" TEXT NOT NULL,
+    "characterImgURL" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "CastMember_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "StaffMember" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "imgURL" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "StaffMember_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -128,6 +147,15 @@ CREATE TABLE "CastOnAnime" (
     "animeId" INTEGER NOT NULL,
 
     CONSTRAINT "CastOnAnime_pkey" PRIMARY KEY ("castId","animeId")
+);
+
+-- CreateTable
+CREATE TABLE "StaffOnAnime" (
+    "staffId" INTEGER NOT NULL,
+    "animeId" INTEGER NOT NULL,
+    "position" TEXT NOT NULL,
+
+    CONSTRAINT "StaffOnAnime_pkey" PRIMARY KEY ("staffId","animeId")
 );
 
 -- CreateTable
@@ -176,6 +204,9 @@ CREATE INDEX "Episode_id_idx" ON "Episode"("id");
 CREATE INDEX "CastMember_id_idx" ON "CastMember"("id");
 
 -- CreateIndex
+CREATE INDEX "StaffMember_id_idx" ON "StaffMember"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_AnimeToTag_AB_unique" ON "_AnimeToTag"("A", "B");
 
 -- CreateIndex
@@ -194,16 +225,16 @@ ALTER TABLE "Follower" ADD CONSTRAINT "Follower_followingId_fkey" FOREIGN KEY ("
 ALTER TABLE "Follower" ADD CONSTRAINT "Follower_followerId_fkey" FOREIGN KEY ("followerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserAnimeFans" ADD CONSTRAINT "UserAnimeFans_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserAnimeSaved" ADD CONSTRAINT "UserAnimeSaved_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserAnimeFans" ADD CONSTRAINT "UserAnimeFans_animeId_fkey" FOREIGN KEY ("animeId") REFERENCES "Anime"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserAnimeSaved" ADD CONSTRAINT "UserAnimeSaved_animeId_fkey" FOREIGN KEY ("animeId") REFERENCES "Anime"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserGenreFans" ADD CONSTRAINT "UserGenreFans_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserAnimeLiked" ADD CONSTRAINT "UserAnimeLiked_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserGenreFans" ADD CONSTRAINT "UserGenreFans_genreId_fkey" FOREIGN KEY ("genreId") REFERENCES "Genre"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserAnimeLiked" ADD CONSTRAINT "UserAnimeLiked_animeId_fkey" FOREIGN KEY ("animeId") REFERENCES "Anime"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Review" ADD CONSTRAINT "Review_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -219,6 +250,12 @@ ALTER TABLE "CastOnAnime" ADD CONSTRAINT "CastOnAnime_castId_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "CastOnAnime" ADD CONSTRAINT "CastOnAnime_animeId_fkey" FOREIGN KEY ("animeId") REFERENCES "Anime"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StaffOnAnime" ADD CONSTRAINT "StaffOnAnime_staffId_fkey" FOREIGN KEY ("staffId") REFERENCES "StaffMember"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StaffOnAnime" ADD CONSTRAINT "StaffOnAnime_animeId_fkey" FOREIGN KEY ("animeId") REFERENCES "Anime"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_AnimeToTag" ADD CONSTRAINT "_AnimeToTag_A_fkey" FOREIGN KEY ("A") REFERENCES "Anime"("id") ON DELETE CASCADE ON UPDATE CASCADE;

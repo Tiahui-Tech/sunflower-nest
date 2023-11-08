@@ -1,15 +1,21 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { AnimeService } from './anime.service';
-import { Anime, AnimeStatus, Prisma } from '@prisma/client';
-import { Anime as AnimeModel } from './models/anime.model';
+import { Anime } from '@prisma/client';
+import {
+  Anime as AnimeModel,
+  CreateAnimeInput,
+  UpdateAnimeInput,
+} from './models/anime.model';
 
 @Resolver()
 export class AnimeResolver {
   constructor(private animeService: AnimeService) {}
 
   @Query(() => [AnimeModel], { nullable: true })
-  async getAllAnimes(): Promise<Anime[]> {
-    return this.animeService.findAll();
+  async getAllAnimes(
+    @Args('limit', { nullable: true }) limit?: number,
+  ): Promise<Anime[]> {
+    return this.animeService.findAll(limit);
   }
 
   @Query(() => [AnimeModel], { nullable: true })
@@ -23,15 +29,20 @@ export class AnimeResolver {
   }
 
   @Mutation(() => AnimeModel, { nullable: true })
-  async createAnime(
-    @Args('title') title: string,
-    @Args('synopsis') synopsis: string,
-    @Args('status') status: AnimeStatus,
-    @Args('imageURL') imageURL: string,
-    @Args('trailerURL') trailerURL: string,
-    @Args('rating') rating: number,
+  async createAnime(@Args('input') input: CreateAnimeInput): Promise<Anime> {
+    return this.animeService.create(input);
+  }
+
+  @Mutation(() => AnimeModel, { nullable: true })
+  async updateAnime(
+    @Args('id') id: number,
+    @Args('input') input: UpdateAnimeInput,
   ): Promise<Anime> {
-    const newAnime = { title, synopsis, status, imageURL, trailerURL, rating };
-    return this.animeService.create(newAnime);
+    return this.animeService.update(id, input);
+  }
+
+  @Mutation(() => AnimeModel, { nullable: true })
+  async deleteAnime(@Args('id') id: number): Promise<Anime> {
+    return await this.animeService.delete(id);
   }
 }

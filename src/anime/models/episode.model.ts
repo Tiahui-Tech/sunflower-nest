@@ -13,16 +13,19 @@ export class Episode {
   animeId: number;
 
   @Field(() => Int)
-  season: number;
-
-  @Field()
-  coverURL: string;
+  episode: number;
 
   @Field()
   title: string;
 
-  @Field(() => Int)
-  duration: number;
+  @Field({ nullable: true })
+  titleJapan?: string;
+
+  @Field({ nullable: true })
+  aired: Date;
+
+  @Field(() => Int, { nullable: true })
+  score: number;
 
   @Field()
   createdAt: Date;

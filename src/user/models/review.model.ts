@@ -19,8 +19,11 @@ export class Review {
   @Field(() => Int)
   animeId: number;
 
-  @Field()
-  content: string;
+  @Field({ nullable: true })
+  review?: string;
+
+  @Field(() => Int)
+  score: number;
 
   @Field()
   createdAt: Date;

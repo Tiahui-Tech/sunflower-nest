@@ -7,13 +7,16 @@ export class CastMember {
   id: number;
 
   @Field()
-  name: string;
+  actor: string;
+
+  @Field({ nullable: true })
+  actorImgURL?: string;
 
   @Field()
   character: string;
 
-  @Field()
-  coverURL: string;
+  @Field({ nullable: true })
+  characterImgURL?: string;
 
   @Field(() => [CastOnAnime], { nullable: true })
   animes?: CastOnAnime[];

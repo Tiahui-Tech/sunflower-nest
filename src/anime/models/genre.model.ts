@@ -1,6 +1,5 @@
 import { Field, ObjectType, Int } from '@nestjs/graphql';
 import { Anime } from './anime.model';
-import { UserGenreFans } from 'src/user/models/user-genre-fans.model';
 
 @ObjectType()
 export class Genre {
@@ -12,9 +11,6 @@ export class Genre {
 
   @Field(() => [Anime], { nullable: true })
   animes?: Anime[];
-
-  @Field(() => [UserGenreFans], { nullable: true })
-  fans?: UserGenreFans[];
 
   @Field()
   createdAt: Date;
